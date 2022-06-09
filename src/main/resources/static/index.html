@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css" />
+	<script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" ></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<div>
+	<p>Url shortening demo.</p>
+	<div>
+	  <label for="fname">URL:</label>
+  	  <input class="url" type="text" id="url" name="url"><br><br>
+	  <button>Encode/Decode</button>
+	</div>
+
+	<div class="result"> </div>
+	<script>
+		$(document).ready(function(){
+		  $("button").click(function(){
+			  var urlValue = $('.url').val();
+			  
+			  if(urlValue.indexOf("http://localhost:8080") >= 0){
+				  var r = new URL(urlValue);
+				  var hashValue = r.pathname;
+				  $.ajax({
+				        url: "/api/v1/urls"+hashValue,
+				        type: 'GET',
+				        dataType: 'json', // added data type
+				        success: function(res) {
+				            console.log(res);
+				            var au = res.actualUrl
+				            $(".result").html(au);
+				        }
+				    });
+			  }else{
+				  $.ajax({
+					  type: "POST",
+					  contentType: 'application/json',
+					  url: "/api/v1/urls",
+					  data: {
+							"actualUrl": "https://www.wipro.com/dsdksldksldksl/test1" 
+					  },
+					  headers: { 
+					        'Accept': 'application/json',
+					        'Content-Type': 'application/json' 
+					    },
+					  dataType: "json",
+					  success: function(res) {
+				            console.log(res);
+				            var hash = res.hashValue;
+				            $(".result").html("http://localhost:8080/"+hash);
+				        }
+					});
+			  }
+		  });
+		});
+	</script>
+	<div>
+</body>
+</html>
