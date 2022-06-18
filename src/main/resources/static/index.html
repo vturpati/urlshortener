@@ -23,10 +23,9 @@
 			  var urlValue = $('.url').val();
 			  
 			  if(urlValue.indexOf("http://localhost:8080") >= 0){
-				  var r = new URL(urlValue);
-				  var hashValue = r.pathname;
+				  var hashValue = urlValue.replace("http://localhost:8080/api/v1/","");
 				  $.ajax({
-				        url: "/api/v1/urls"+hashValue,
+				        url: "/api/v1/urls/"+hashValue,
 				        type: 'GET',
 				        dataType: 'json', // added data type
 				        success: function(res) {
@@ -53,7 +52,7 @@
 						$.ajax(settings).done(function (res) {
 						  console.log(res);
 						  var hash = res.hashValue;
-				            $(".result").html("http://localhost:8080/"+hash);
+				            $(".result").html("http://localhost:8080/api/v1/"+hash);
 						});
 			  }
 		  });

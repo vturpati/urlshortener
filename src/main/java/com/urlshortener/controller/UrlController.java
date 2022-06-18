@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.urlshortener.model.Url;
 import com.urlshortener.repository.UrlRepository;
@@ -61,6 +62,12 @@ public class UrlController {
 	@GetMapping("/urls/{hash}")
 	public Url getUrl(@PathVariable(value="hash") String hash) {
 		return urlRepository.findByHashValue(hash);
+	}
+	
+	@GetMapping("/{hash}")
+	public ModelAndView redirectUrl(@PathVariable(value="hash") String hash) {
+		Url url =  urlRepository.findByHashValue(hash);
+		return new ModelAndView("redirect:" + url.getActualUrl());
 	}
 	
 	public static byte[] getSHA(String input) throws NoSuchAlgorithmException
