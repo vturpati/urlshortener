@@ -16,7 +16,7 @@ Open http://localhost:8080/index.html
 It has form where URL can be either shortened or unshortened 
 
 
-#Api developed
+# Api developed
 
 Post api /api/v1/urls/ with body 
 {
@@ -33,6 +33,9 @@ Response as {
     "hashValue": "7134832"
 }
 
+Get api /api/v1/{hashvalue}
+
+Will redirect to actual page
 
 ## License
 
