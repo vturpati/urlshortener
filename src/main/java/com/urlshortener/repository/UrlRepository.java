@@ -15,4 +15,7 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
 	@Query("SELECT t FROM Url t WHERE t.hashValue = ?1")
     Url findByHashValue(String hash);
 
+	@Query("SELECT t FROM Url t WHERE t.actualUrl = ?1")
+    Url findByActualUrl(String actualUrl);
+	
 }

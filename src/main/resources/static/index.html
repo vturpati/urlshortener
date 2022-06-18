@@ -36,24 +36,25 @@
 				        }
 				    });
 			  }else{
-				  $.ajax({
-					  type: "POST",
-					  contentType: 'application/json',
-					  url: "/api/v1/urls",
-					  data: {
-							"actualUrl": "https://www.wipro.com/dsdksldksldksl/test1" 
-					  },
-					  headers: { 
-					        'Accept': 'application/json',
-					        'Content-Type': 'application/json' 
-					    },
-					  dataType: "json",
-					  success: function(res) {
-				            console.log(res);
-				            var hash = res.hashValue;
+				  var settings = {
+						  "async": true,
+						  "crossDomain": true,
+						  "url": "http://localhost:8080/api/v1/urls",
+						  "method": "POST",
+						  "headers": {
+						    "content-type": "application/json",
+						    "cache-control": "no-cache",
+						    "postman-token": "5eb2a48c-b556-6ea4-9b87-c6f6bc72d8f8"
+						  },
+						  "processData": false,
+						  "data": "{\n\t\"actualUrl\": \""+urlValue+"\" \n}"
+						}
+
+						$.ajax(settings).done(function (res) {
+						  console.log(res);
+						  var hash = res.hashValue;
 				            $(".result").html("http://localhost:8080/"+hash);
-				        }
-					});
+						});
 			  }
 		  });
 		});

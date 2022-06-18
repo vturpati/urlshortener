@@ -27,6 +27,7 @@ public class UrlController {
 	
 	@Autowired
 	private UrlRepository urlRepository;
+	
 	/*
 	@GetMapping("/urls")
 	public List<Url> getAllUrls(){
@@ -35,14 +36,26 @@ public class UrlController {
 	
 	@PostMapping("/urls")
 	public Url createUrl(@RequestBody Url url) throws NoSuchAlgorithmException {
-		String hashStr = toHexString(getSHA(url.getActualUrl()));
-		Url existing =  urlRepository.findByHashValue(hashStr);
-		if(existing.getActualUrl().length() > 0 ) {
-			url.setHashValue(hashStr);
-			return urlRepository.save(url);
-		}else {
+		String fullHashValue = toHexString(getSHA(url.getActualUrl()));
+		String hashStr = fullHashValue.substring(0,7);
+		Url existing =  urlRepository.findByActualUrl(url.getActualUrl());
+		if(existing != null ){
 			return existing;
 		}
+		
+		//check for collision
+		int start = 8;
+		while(true) {
+			Url collisionUrl =  urlRepository.findByHashValue(hashStr); 
+			if(collisionUrl != null) {
+				hashStr = hashStr.substring(0, start);
+			}else {
+				break;
+			}
+			start++;
+		}
+		url.setHashValue(hashStr);
+		return urlRepository.save(url);
 	}
 	
 	@GetMapping("/urls/{hash}")
